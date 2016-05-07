@@ -31,55 +31,39 @@ namespace ECD_Engine.Behaviours
     
     public class DrawSystem : System
     {
-        private Dictionary<int, Rectangle> boundingBoxes = new Dictionary<int, Rectangle>();
         private Dictionary<int, double> angles = new Dictionary<int, double>();
         private Dictionary<int, Vector2> positionVectors = new Dictionary<int, Vector2>();
         private Dictionary<int, Texture2D> textures = new Dictionary<int, Texture2D>();
-        private Dictionary<int, bool> eWithBoxes = new Dictionary<int, bool>();
 
+        public DrawSystem(SortedList<int, List<Component>> entitiesSortedList, int updatePriority) : base(entitiesSortedList, updatePriority)
+        {
+        }
 
         public override void Update(float deltaTime)
         {
             foreach (var entity in EntitiesSortedList)
             {
                 if (entity.Value.GetComponent<DrawAble>() != null &&
-                    entity.Value.GetComponent<Position>() != null &&
-                    entity.Value.GetComponent<BoxCollider>() == null)
+                    entity.Value.GetComponent<Position>() != null)
                 {
                     textures.Add(entity.Key, entity.Value.GetComponent<DrawAble>().Texture);
                     positionVectors.Add(entity.Key, entity.Value.GetComponent<Position>().PosVector);
-                    eWithBoxes.Add(entity.Key, false);
-                }
-                if (entity.Value.GetComponent<DrawAble>() != null &&
-                    entity.Value.GetComponent<Position>() != null &&
-                    entity.Value.GetComponent<BoxCollider>() != null)
-                {
-                    textures.Add(entity.Key, entity.Value.GetComponent<DrawAble>().Texture);
-                    positionVectors.Add(entity.Key, entity.Value.GetComponent<Position>().PosVector);
-                    angles.Add(entity.Key, entity.Value.GetComponent<Position>().RadianOrientation);
-                    boundingBoxes.Add(entity.Key, entity.Value.GetComponent<BoxCollider>().BoundingBox);
-                    eWithBoxes.Add(entity.Key, true); 
                 }
 
             }
         }
-        public DrawSystem(SortedList<int, List<Component>> entitiesSortedList, int updatePriority) : base(entitiesSortedList, updatePriority)
-        {
-        }
-
         public override void Draw(SpriteBatch spriteBatch)
         {
             foreach (var key in EntitiesSortedList.Keys)
             {
-                if (EntitiesSortedList[key].GetComponent<DrawAble>().IsActive && !eWithBoxes[key])
+                if (EntitiesSortedList[key].GetComponent<DrawAble>().IsActive)
                 {
-                    spriteBatch.Draw(textures[key], positionVectors[key]);
+                    spriteBatch.Draw(textures[key], new Rectangle(0, 0, textures[key].Width, textures[key].Height), null,
+                        Color.White, (float) angles[key], new Vector2(textures[key].Width/2f, textures[key].Height/2f),
+                        SpriteEffects.None, 0f);
+
                 }
-                else if (EntitiesSortedList[key].GetComponent<DrawAble>().IsActive && eWithBoxes[key])
-                {
-                    spriteBatch.Draw(textures[key],);
-                }
-            }
+
         }
 
     }
@@ -87,7 +71,6 @@ namespace ECD_Engine.Behaviours
     public class MoveSystem : System
     {
         private float deltaTime;
-        private float velX, velY;
 
         public MoveSystem (SortedList<int, List<Component>> entitiesSortedList, int updatePriority) : base(entitiesSortedList, updatePriority)
         {
@@ -154,8 +137,7 @@ namespace ECD_Engine.Behaviours
         {
             foreach (var entity in EntitiesSortedList)
             {
-                if (entity.Value.GetComponent<MoveAble>() != null &&
-                    entity.Value.GetComponent<BoxCollider>() != null &&
+                if (entity.Value.GetComponent<BoxCollider>() != null &&
                     entity.Value.GetComponent<Position>() != null)
                 {
                     entity.Value.GetComponent<BoxCollider>().OriginPoint =
