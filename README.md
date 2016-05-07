@@ -1,2 +1,2 @@
 # ECD-eng
-super projekt kurwao
+Asteroids using entities - component - system design
