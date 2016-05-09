@@ -38,8 +38,14 @@
     <ApplicationIcon>Icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Behaviours\Behaviours.cs" />
-    <Compile Include="Behaviours\EventDispatcher.cs" />
+    <Compile Include="InputHandling\InputHandler.cs" />
+    <Compile Include="InputHandling\KeyboardEventSender.cs" />
+    <Compile Include="Patterns\Command.cs" />
+    <Compile Include="Patterns\ServiceLocator.cs" />
+    <Compile Include="Patterns\Singleton.cs" />
+    <Compile Include="Services\RandomNumbersService.cs" />
+    <Compile Include="Systems\Systems.cs" />
+    <Compile Include="Patterns\Observer.cs" />
     <Compile Include="Components\Components.cs" />
     <Compile Include="EntityFactory.cs" />
     <Compile Include="Extensions\Extensions.cs" />

@@ -16,6 +16,10 @@ namespace ECD_Engine
     public static class GlobalSettings
     {
         public static Difficulty Difficulty { get; set; } = Difficulty.Medium;
-        public static int Velocity { get; set; }
+        public static int Acceleration { get; set; }
+        public static int MaxX { get; set; }
+        public static int MaxY { get; set; }
+        public static int MinX { get; set; }
+        public static int MinY { get; set; }
     }
 }

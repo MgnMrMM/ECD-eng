@@ -1,5 +1,4 @@
 ﻿using System;
-using ECD_Engine.Behaviours;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -16,18 +15,20 @@ namespace ECD_Engine.Components
 
     public enum Message
     {
-        CollsionWithBullet,
-        CollisionWithRock,
+        CollisionWithObject,
         CollisionWithScreenEdge,
         ShotFired,
-        ShipDestroyed
+        ShipDestroyed,
+        RotateRight,
+        RotateLeft,
+        Thrust
     }
 
     public abstract class Component
     {
     }
 
-    public class Position : Component
+    public sealed class Position : Component
     {
         public float PosX { get; set; }
         public float PosY { get; set; }
@@ -38,7 +39,7 @@ namespace ECD_Engine.Components
         public Vector2 DirectionVector => new Vector2(DirectionX, DirectionY);
     }
 
-    public class BoxCollider : Component
+    public sealed class BoxCollider : Component
     {
         public bool IsActive { get; set; } //if is not active then it serves only as a passive collision target (can not collide but can be collided with)
         public Point Size { get; set; }
@@ -47,16 +48,17 @@ namespace ECD_Engine.Components
 
     }
 
-    public class DrawAble : Component
+    public sealed class DrawAble : Component
     {
         public Texture2D Texture { get; set; }
         public Color Color { get; set; }
         public bool IsActive { get; set; }
     }
 
-    public class MoveAble : Component
+    public sealed class MoveAble : Component
     {
         public bool IsActive { get; set; }
+        public bool IsControlled { get; set; }
         public float Acceleration { get; set; }
         public float RotationSpeed { get; set; }
         public float VelX { get; set; }
@@ -65,17 +67,29 @@ namespace ECD_Engine.Components
         public Vector2 Velocity => new Vector2(VelX, VelY);
     }
 
-    public class AnimateAble : Component
+    public sealed class AiControlled : Component
     {
         public bool IsActive { get; set; }
         public float AnimationDuration { get; set; }
     }
 
-    public class AiControlled : Component
+    public sealed class Tag : Component
     { 
+        public string Name { get; private set; }
+
+        public Tag (string name)
+        {
+            Name = name;
+        }
     }
 
-    public class PlayerControlled : Component
+    public sealed class Gun : Component
+    {
+        public float GunSpeed { get; set; }
+        public int MarksmanshipLevel { get; set; }
+    }
+
+    public sealed class PlayerControlled : Component
     {
         public int Lives { get; set; }
     }
